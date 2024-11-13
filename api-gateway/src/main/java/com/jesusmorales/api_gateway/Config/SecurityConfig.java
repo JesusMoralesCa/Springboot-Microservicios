@@ -1,4 +1,3 @@
-/*
 package com.jesusmorales.api_gateway.Config;
 
 import org.springframework.context.annotation.Bean;
@@ -22,4 +21,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-}*/
+}

@@ -1,4 +1,4 @@
-/*
+
 package com.jesusmorales.products_service.Config;
 
 import org.springframework.context.annotation.Bean;
@@ -29,6 +29,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable()) // Desactiva CSRF
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/**","/api/product/**").authenticated() // Protege todas las rutas
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -60,4 +61,4 @@ class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<GrantedAut
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-}*/
+}

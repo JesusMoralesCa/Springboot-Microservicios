@@ -1,4 +1,3 @@
-/*
 package com.jesusmorales.discovery_server.Config;
 
 
@@ -10,7 +9,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-
+/*
 @Configuration
 public class SecurityConfig {
 
@@ -38,7 +37,7 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-}
+}*/
 
 
 @Configuration
@@ -51,4 +50,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
-*/
+

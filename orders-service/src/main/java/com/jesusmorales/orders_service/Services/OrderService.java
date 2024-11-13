@@ -22,7 +22,7 @@ public class OrderService implements IOrderService{
     private final WebClient.Builder webClientBuilder;
 
     @Override
-    public void placeOrder(OrderRequest orderRequest) {
+    public OrderResponse placeOrder(OrderRequest orderRequest) {
         // Verifica el inventario
         BaseResponse result = this.webClientBuilder.build()
                 .post()
@@ -48,7 +48,19 @@ public class OrderService implements IOrderService{
                     .collect(Collectors.toList());
 
             order.setOrderItems(orderItems);
-            this.orderRepository.save(order);
+            Order savedOrder = this.orderRepository.save(order);
+            // Convertir el Order guardado a OrderResponse
+            return new OrderResponse(
+                    savedOrder.getId(),
+                    savedOrder.getOrderNumber(),
+                    savedOrder.getOrderItems().stream()
+                            .map(orderItem -> new OrderItemsResponse(
+                                    orderItem.getId(),
+                                    orderItem.getSku(),
+                                    orderItem.getPrice(),
+                                    orderItem.getQuantity()))
+                            .collect(Collectors.toList())
+            );
         } else {
             throw new IllegalArgumentException("Some of the products are not in stock");
         }

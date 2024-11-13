@@ -6,7 +6,7 @@ import com.jesusmorales.orders_service.Model.Dtos.OrderResponse;
 import java.util.List;
 
 public interface IOrderService {
-    void placeOrder(OrderRequest orderRequest);
+    OrderResponse placeOrder(OrderRequest orderRequest);
 
     List<OrderResponse> getAllOrders();
 }
