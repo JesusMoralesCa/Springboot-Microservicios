@@ -1,13 +1,17 @@
 package com.jesusmorales.orders_service.Services;
 
+import com.jesusmorales.orders_service.Events.OrderEvent;
 import com.jesusmorales.orders_service.Model.Dtos.BaseResponse;
 import com.jesusmorales.orders_service.Model.Dtos.OrderItemsResponse;
 import com.jesusmorales.orders_service.Model.Dtos.OrderRequest;
 import com.jesusmorales.orders_service.Model.Dtos.OrderResponse;
 import com.jesusmorales.orders_service.Model.Entities.Order;
 import com.jesusmorales.orders_service.Model.Entities.OrderItems;
+import com.jesusmorales.orders_service.Model.Enum.OrderStatus;
 import com.jesusmorales.orders_service.Repositories.OrderRepository;
+import com.jesusmorales.orders_service.Utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 public class OrderService implements IOrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+    private final KafkaTemplate<String,String> kafkaTemplate;
 
     @Override
     public OrderResponse placeOrder(OrderRequest orderRequest) {
@@ -49,6 +54,18 @@ public class OrderService implements IOrderService{
 
             order.setOrderItems(orderItems);
             Order savedOrder = this.orderRepository.save(order);
+
+            //TODO: Send message to order topic
+            kafkaTemplate.send("orders-topic",JsonUtils.toJson(
+                    new OrderEvent(
+                            savedOrder.getOrderNumber(),
+                            savedOrder.getOrderItems().size(),
+                            OrderStatus.PLACED
+                    )
+            ));
+
+
+
             // Convertir el Order guardado a OrderResponse
             return new OrderResponse(
                     savedOrder.getId(),
