@@ -14,10 +14,10 @@ public class OrderController {
 
     private final IOrderService orderService;
 
-    @PostMapping("/addProduct")
+    @PostMapping("/addOrder")
     public ResponseEntity<?> placeOrder(@RequestBody OrderRequest orderRequest) {
         orderService.placeOrder(orderRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Producto creado");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Orden creada");
     }
 
 
